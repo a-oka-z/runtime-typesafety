@@ -54,7 +54,7 @@ function parse_args( args ) {
   return args;
 }
 
-function wrap_validator_by_array( validator ) {
+function wrap_validator( validator ) {
   return validator;
 }
 function wrap_validator_by_array2( validator ) {
@@ -220,7 +220,7 @@ function typesafe_function( ...args ) {
         try {
           call_handler(this, on_enter,'on_enter', {args});
 
-          const input_validator = wrap_validator_by_array( typesafe_input() );
+          const input_validator = wrap_validator( typesafe_input() );
 
           if ( ! input_validator( args ) ) {
             call_handler( this, on_input_error, 'on_input_error'  );
@@ -265,7 +265,7 @@ function typesafe_function( ...args ) {
         try {
           call_handler(this, on_enter,'on_enter', {args});
 
-          const input_validator = wrap_validator_by_array( typesafe_input() );
+          const input_validator = wrap_validator( typesafe_input() );
 
           if ( ! input_validator( args ) ) {
             call_handler( this, on_input_error, 'on_input_error'  );

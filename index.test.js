@@ -13,8 +13,21 @@
       },
     };
   }
+  const pfn = typesafe_function(fn);
 
-test( 'test' , ()=>{
-  const f = typesafe_function(fn);
-  console.error( f({foo:100}).foo.bar.baz.value );
+test( 'test1' , ()=>{
+  expect(()=>{
+    console.error( pfn({foo:100,bar:200}).value.foo.bar.baz.value );
+  }).not.toThrow();
 });
+
+test( 'test2' , ()=>{
+  expect(()=>{
+    console.error( pfn({foo:100        }).value.foo.bar.baz.value );
+  }).toThrow();
+});
+
+test( 'test3' , ()=>{
+  expect( pfn({foo:100,bar:200}).value.foo.bar.baz.value  ).toBe( 100 );
+});
+
