@@ -1,5 +1,5 @@
 {
-  "name": "typesafe",
+  "name": "runtime-typesafety",
   "version": "1.0.0",
   "description": "",
   "main": "index.mjs",
@@ -44,11 +44,11 @@
   },
   "author": {
     "name": "Atsushi Oka",
-    "url": "https://github.com/a-oka-z/typesafe"
+    "url": "https://github.com/a-oka-z/runtime-typesafety"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/a-oka-z/typesafe"
+    "url": "https://github.com/a-oka-z/runtime-typesafety"
   },
   "license": "ISC",
   "devDependencies": {

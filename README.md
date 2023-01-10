@@ -1,5 +1,5 @@
 
- typesafe
+ `runtime-typesafety`
 ================================================================================
 
  Synopsys
@@ -50,8 +50,8 @@ Thank you very much for your attention.
 
 [Atsushi Oka][] / I'm from Tokyo. For further information, see my github account.
 
-[Github Repository of `typesafe`](Github)
+[Github Repository of `runtime-typesafety`](Github)
 
-[Github]: https://github.com/a-oka-z/typesafe
+[Github]: https://github.com/a-oka-z/runtime-typesafety
 [Atsushi Oka]: https://github.com/a-oka-z/
 
