@@ -44,7 +44,7 @@ see [fold-args][].
 Released.
 
 #### v1.0.1 ####
-(Tue, 10 Jan 2023 13:35:00 +0900)
+(Tue, 10 Jan 2023 14:17:43 +0900)
 Updated `README.md` and the description in `package.js`.
 
 
