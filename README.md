@@ -43,6 +43,11 @@ see [fold-args][].
 (Tue, 10 Jan 2023 13:35:00 +0900)
 Released.
 
+#### v1.0.1 ####
+(Tue, 10 Jan 2023 13:35:00 +0900)
+Updated `README.md` and the description in `package.js`.
+
+
 
  Conclusion
 --------------------------------------------------------------------------------
@@ -50,7 +55,7 @@ Thank you very much for your attention.
 
 [Atsushi Oka][] / I'm from Tokyo. For further information, see my github account.
 
-[Github Repository of `runtime-typesafety`](Github)
+[Github Repository of `runtime-typesafety`][Github]
 
 [Github]: https://github.com/a-oka-z/runtime-typesafety
 [Atsushi Oka]: https://github.com/a-oka-z/
