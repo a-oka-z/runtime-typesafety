@@ -24,7 +24,7 @@ function typesafe_function({
 ```
 `typesafe_function()` protects your function from `undefined` values at
 **runtime** and offers information to diagnosis where these extraterrestrial
-`undefined` values comes from.
+`undefined` values come from.
 
 See [prevent-undefined][] for further information about `preventUndefined()`
 which is a roubust system to protect your programs from accidentally accessing
@@ -46,6 +46,10 @@ Released.
 #### v1.0.1 ####
 (Tue, 10 Jan 2023 14:17:43 +0900)
 Updated `README.md` and the description in `package.js`.
+
+#### v1.0.2 ####
+(Wed, 11 Jan 2023 10:50:48 +0900)
+Updated `README.md` to correct a grammatical error.
 
 
 
