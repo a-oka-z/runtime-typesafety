@@ -22,13 +22,13 @@ function typesafe_function({
 }) {
 }
 ```
-`typesafe_function()` protects your function from `undefined` values at
+`typesafe_function()` protects your functions from `undefined` values at
 **runtime** and offers information to diagnosis where these extraterrestrial
 `undefined` values come from.
 
 See [prevent-undefined][] for further information about `preventUndefined()`
-which is a roubust system to protect your programs from accidentally accessing
-to an undefined values by incorrect field names.
+function which is a roubust system to protect your code from accidentally
+accessing undefined values via incorrect field names.
 
 Note that the named arguments are processed by [fold-args][] so that an earlier
 argument will be overridden by the latter arguments; for further information,

@@ -1,6 +1,6 @@
 {
   "name": "runtime-typesafety",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "an utility to propose a way to implement type-safety at run-time, not compile-time",
   "main": "index.mjs",
   "type": "module",
