@@ -20,6 +20,7 @@ const UTIL_INSPECT_CUSTOM              = require( 'util' ).inspect.custom;
 module.exports.typesafe_function        = typesafe_function;
 module.exports.no_typesafe_function     = no_typesafe_function;
 module.exports.get_typesafe_tags        = get_typesafe_tags;
+module.exports.set_typesafe_tags        = set_typesafe_tags;
 module.exports.get_output_typesafe_info = get_output_typesafe_info
 module.exports.get_input_typesafe_info  = get_input_typesafe_info;
 

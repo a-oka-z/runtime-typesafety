@@ -347,28 +347,68 @@ function typesafe_function( ...args ) {
   return preventUndefined( result );
 }
 
-function get_input_typesafe_info( inputFn ) {
-  if ( CONST_TYPESAFE_INPUT in inputFn ) {
-    return inputFn[CONST_TYPESAFE_INPUT];
+function check_if_function( value ) {
+  if ( value === null || value === undefined ) {
+    throw new ReferenceError( `argument was not specified '${value}'` );
+  }
+  if ( typeof value !== 'function' ) {
+    throw new ReferenceError( `argument must be either an object, an array or a function '${value}'` );
+  }
+  return value;
+}
+
+function check_if_object( value ) {
+  if ( value === null || value === undefined ) {
+    throw new ReferenceError( `argument was not specified '${value}'` );
+  }
+  if ( typeof value !== 'object' && typeof value !== 'function' ) {
+    throw new ReferenceError( `argument must be either an object, an array or a function '${value}'` );
+  }
+  return value;
+}
+
+function get_input_typesafe_info( input_fn ) {
+  check_if_function( input_fn );
+
+  if ( CONST_TYPESAFE_INPUT in input_fn ) {
+    return input_fn[CONST_TYPESAFE_INPUT];
   } else {
     return null;
   }
 }
 
-function get_output_typesafe_info( inputFn ) {
-  if ( CONST_TYPESAFE_OUTPUT in inputFn ) {
-    return inputFn[CONST_TYPESAFE_OUTPUT];
+function get_output_typesafe_info( input_fn ) {
+  check_if_function( input_fn );
+
+  if ( CONST_TYPESAFE_OUTPUT in input_fn ) {
+    return input_fn[CONST_TYPESAFE_OUTPUT];
   } else {
     return null;
   }
 }
 
-function get_typesafe_tags( inputFn ) {
-  if ( CONST_TYPESAFE_TAGS in inputFn ) {
-    return inputFn[CONST_TYPESAFE_TAGS];
+function get_typesafe_tags( value ) {
+  check_if_object( value );
+
+  if ( CONST_TYPESAFE_TAGS in value ) {
+    return value[CONST_TYPESAFE_TAGS];
   } else {
     return [];
   }
+}
+
+function set_typesafe_tags( value, ...tags ) {
+  check_if_object( value );
+
+  Object.defineProperties( value, {
+    [CONST_TYPESAFE_TAGS] : {
+      value : [ ...tags ],
+      writable : false,
+      enumerable : false,
+      configurable : true,
+    },
+  });
+  return value;
 }
 
 

@@ -37,6 +37,8 @@ see [fold-args][].
 [prevent-undefined]: https://www.npmjs.com/package/prevent-undefined
 [fold-args]: https://www.npmjs.com/package/fold-args
 
+
+
  History
 --------------------------------------------------------------------------------
 #### v1.0.0 ####
@@ -50,6 +52,10 @@ Updated `README.md` and the description in `package.js`.
 #### v1.0.2 ####
 (Wed, 11 Jan 2023 10:50:48 +0900)
 Updated `README.md` to correct a grammatical error.
+
+#### v1.0.3 ####
+(Fri, 20 Jan 2023 16:06:02 +0900)
+added `set_typesafe_tags()` function.
 
 
 
