@@ -14,10 +14,9 @@
     }
   },
   "scripts": {
-    "test-es6": "NODE_OPTIONS='--experimental-vm-modules' jest index.test.mjs",
-    "test-cs": "                                          jest index.test.cjs",
-    "test-simple": "npm run make; npm run test-cs",
-    "test": "npm run make; npm run test-cs; npm run test-es6",
+    "test-esm": "node --test-reporter=spec index.test.mjs",
+    "test-cjs": "node --test-reporter=spec index.test.cjs",
+    "test": "npm run make; npm run test-cjs; npm run test-esm",
     "make": "node ./make.js"
   },
   "files": [
@@ -26,22 +25,6 @@
     "index.mjs",
     "package.json"
   ],
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "mjs",
-      "cjs",
-      "jsx",
-      "ts",
-      "tsx",
-      "json",
-      "node"
-    ],
-    "testMatch": [
-      "**/*.test.[cm]js"
-    ],
-    "verbose": true
-  },
   "author": {
     "name": "Atsushi Oka",
     "url": "https://github.com/a-oka-z/runtime-typesafety"

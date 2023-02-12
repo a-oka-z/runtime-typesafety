@@ -38,6 +38,47 @@ see [fold-args][].
 [fold-args]: https://www.npmjs.com/package/fold-args
 
 
+ Callbacks
+--------------------------------------------------------------------------------
+
+There are currently five callback functions which enable processes outside the
+protected function to receive various events which `runtime-typesafe` notifies.
+
+  - `on_enter`
+  - `on_leave`
+  - `on_leave_with_error`
+  - `on_input_error`
+  - `on_output_error`
+
+```javascript
+function on_callback( named_arguments : t_callback_arguments );
+
+t_callback_arguments : object(
+  fn              : function(), // the protected function
+  fn_name         : string(),   // the name of the original function
+  typesafe_input  : function(), // the input validator
+  typesafe_output : function(), // the output validator
+);
+
+t_callback_arguments_on_enter : and(
+  t_callback_arguments(),
+  object(
+    args : array_of( any() ), // the arguments which are passed when 
+                              // the protected function is called.
+  ),
+);
+
+t_callback_arguments_on_leave : and(
+  t_callback_arguments(),
+  object(
+    result : any(), // the result value when the protected function exits
+                    // from a calling session.
+  ),
+);
+```
+
+[//]: # (Fri, 10 Feb 2023 16:12:39 +0900) 
+
 
  History
 --------------------------------------------------------------------------------

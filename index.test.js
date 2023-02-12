@@ -13,53 +13,73 @@
       },
     };
   }
-  const pfn = typesafe_function(fn, {
+  const safe_fn = typesafe_function(fn, {
     tags : 'hello',
   });
 
-test( 'test1' , ()=>{
-  expect(()=>{
-    console.error( pfn({foo:100,bar:200}).value.foo.bar.baz.value );
-  }).not.toThrow();
-});
-
-test( 'test2' , ()=>{
-  expect(()=>{
-    console.error( pfn({foo:100        }).value.foo.bar.baz.value );
-  }).toThrow();
-});
-
-test( 'test3' , ()=>{
-  expect( pfn({foo:100,bar:200}).value.foo.bar.baz.value  ).toBe( 100 );
-});
-
-
-test( 'get_typesafe_tags_test_01' , ()=>{
-  const fn = function fn() {
-  }
-
-  const pfn = typesafe_function(fn, {
-    tags : 'foo',
-  },{
-    tags : 'bar',
+describe('test', ()=>{
+  it( 'test1' , ()=>{
+    assert.doesNotThrow(()=>{
+      console.error( safe_fn({foo:100,bar:200}).value.foo.bar.baz.value );
+    });
   });
 
-  expect( unprevent( get_typesafe_tags( pfn )) ).toEqual( [ 'foo' ,'bar' ] );
-});
-
-
-test( 'get_typesafe_tags_test_02' , ()=>{
-  const fn = function fn() {
-  }
-
-  const pfn = typesafe_function(fn, {
-    tags : 'foo',
-  },{
-    tags : 'bar',
+  it( 'test2' , ()=>{
+    assert.throws(()=>{
+      console.error( safe_fn({foo:100        }).value.foo.bar.baz.value );
+    });
   });
 
-  set_typesafe_tags( pfn , 'FOO' );
+  it( 'test3' , ()=>{
+    assert.equal( safe_fn({foo:100,bar:200}).value.foo.bar.baz.value, 100 );
+  });
 
-  expect( unprevent( get_typesafe_tags( pfn )) ).toEqual( [ 'FOO'  ] );
+
+  it( 'get_typesafe_tags_test_01' , ()=>{
+    const fn = function fn() {
+    }
+
+    const safe_fn = typesafe_function(fn, {
+      tags : 'foo',
+    },{
+      tags : 'bar',
+    });
+
+    assert.deepEqual( unprevent( get_typesafe_tags( safe_fn )), [ 'foo' ,'bar' ] );
+  });
+
+
+  it( 'get_typesafe_tags_test_02' , ()=>{
+    const fn = function fn() {
+    }
+
+    const safe_fn = typesafe_function(fn, {
+      tags : 'foo',
+    },{
+      tags : 'bar',
+    });
+
+    set_typesafe_tags( safe_fn , 'FOO' );
+
+    assert.deepEqual( unprevent( get_typesafe_tags( safe_fn )), [ 'FOO'  ] );
+  });
+
+  describe( 'edit_error' , ()=>{
+    it( 'as first', ()=>{
+      const fn = function fn() {
+        throw new Error( 'hello' );
+      }
+
+      const safe_fn = typesafe_function(fn, {
+        tags : 'foo',
+      },{
+        tags : 'bar',
+      });
+
+      safe_fn();
+
+    });
+  });
+
 });
 

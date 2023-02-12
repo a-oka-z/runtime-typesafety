@@ -83,6 +83,76 @@ function wrap_validator_by_array2( validator ) {
   return wrapper_validator;
 }
 
+const slice_strings =(s,...range)=>s.split('\n').slice(...range).join('\n');
+const edit_error_original = (error_on_occured, error_on_created)=>{
+  const stacktrace_on_occured = error_on_occured.stack;
+  const stacktrace_on_created = error_on_created.stack;
+  const new_message = error_on_occured.message;
+  const new_cause = error_on_occured.cause;
+
+  const new_stack =
+    new_message + '\n' +
+    'stacktrace on occured:' + '\n' +
+    slice_strings( stacktrace_on_occured,1) + '\n' +
+    'stacktrace on created:' + '\n' +
+    slice_strings( stacktrace_on_created,1) + '\n' +
+    '\n' +
+    '';
+
+  Object.defineProperties( error_on_occured, {
+    'stack': {
+      value : new_stack,
+      enumerable : false,
+      writable : true,
+      configurable : true,
+    },
+
+    'message': {
+      value : new_message,
+      enumerable : true,
+      writable : false,
+      configurable : false,
+    },
+
+    [UTIL_INSPECT_CUSTOM] : {
+      value : (depth)=>{
+        return {
+          type : e.constructor.name,
+          message: new_message,
+          stack : new_stack,
+          cause : new_cause,
+        };
+      },
+      enumerable : false,
+      writable : true,
+      configurable : true,
+    },
+  });
+  return error_on_occured;
+};
+
+const edit_error_simple = (error_on_occured, error_on_created)=>{
+  const stacktrace_on_occured = error_on_occured.stack;
+  const stacktrace_on_created = error_on_created.stack;
+  Object.defineProperties( error_on_occured, {
+    "typesafety_initiated_on" : {
+      value : error_on_created,
+      enumerable : true,
+      writable : true,
+      configurable : true,
+    },
+  });
+  return error_on_occured;
+};
+
+
+class StackTrace extends Error {
+  constructor (...args) {
+    super(...args);
+  }
+}
+
+
 /**
  * all event handlers are guaranteed to be called with `this`.
  */
@@ -158,58 +228,8 @@ function typesafe_function( ...args ) {
     }
   };
 
-  const chomp_str =(s,...range)=>s.split('\n').slice(...range).join('\n');
-  const stacktrace_on_created = new Error().stack;
-  const edit_error = (e)=>{
-    const stacktrace_on_occured = e.stack;
-    const new_message = e.message;
-    const new_cause = e.cause;
-
-    const new_stack =
-      new_message + '\n' +
-      'stacktrace on occured:' + '\n' +
-      chomp_str( stacktrace_on_occured,1) + '\n' +
-      'stacktrace on created:' + '\n' +
-      chomp_str( stacktrace_on_created,1) + '\n' +
-      '\n' +
-      '';
-
-    Object.defineProperties( e, {
-      'stack': {
-        value : new_stack,
-        enumerable : false,
-        writable : true,
-        configurable : true,
-      },
-
-      'message': {
-        value : new_message,
-        enumerable : true,
-        writable : false,
-        configurable : false,
-      },
-
-      [UTIL_INSPECT_CUSTOM] : {
-        value : (depth)=>{
-          return {
-            type : e.constructor.name,
-            message: new_message,
-            stack : new_stack,
-            cause : new_cause,
-          };
-        },
-        enumerable : false,
-        writable : true,
-        configurable : true,
-      },
-    });
-
-    // if ( 0<property.length) {
-    //   console.error( 'asd23352tgw' , e );
-    // }
-
-    return e;
-  };
+  const error_on_created = new StackTrace();
+  const edit_error = edit_error_simple;
 
   // Note that `preventUndefined` ignores null validator.
   // Also note that typesafe_input / typesafe_output are validator factories.
@@ -255,7 +275,7 @@ function typesafe_function( ...args ) {
 
           return output;
         } catch ( e ) {
-          e = edit_error(e);
+          e = edit_error(e, error_on_created);
           call_handler( this, on_leave_with_error, 'on_leave_with_error', {error: e} );
           throw e;
         }
@@ -300,7 +320,7 @@ function typesafe_function( ...args ) {
 
           return output;
         } catch ( e ) {
-          e = edit_error(e);
+          e = edit_error(e, error_on_created);
           call_handler( this, on_leave_with_error, 'on_leave_with_error', {error: e} );
           throw e;
         }
