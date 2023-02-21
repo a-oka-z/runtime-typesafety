@@ -22,21 +22,21 @@ function parse_args( args ) {
   // 1. fold all values in args
   args = fold_args(
     [ ...args ],
-    [ 
+    [
       SYM_FUNCTION, SYM_STRING,
       'fn', 'tags', 'typesafe_input', 'typesafe_output', 'property',
       'on_enter', 'on_leave', 'on_leave_with_error', 'on_input_error', 'on_output_error' ,
       'unprotected_input', 'unprotected_output',
-    ], 
+    ],
     [
       {
         typesafe_input      : the_last_or_default,
         typesafe_output     : the_last_or_default,
         property            : the_all,
-        on_enter            : the_last, 
-        on_leave            : the_last, 
-        on_leave_with_error : the_last, 
-        on_input_error      : the_last, 
+        on_enter            : the_last,
+        on_leave            : the_last,
+        on_leave_with_error : the_last,
+        on_input_error      : the_last,
         on_output_error     : the_last,
         unprotected_input   : the_last,
         unprotected_output  : the_last,
@@ -47,7 +47,7 @@ function parse_args( args ) {
   // 2. treat string values as `tags`
   args['tags'].push( ...args[ SYM_STRING ] );
   args['fn'  ].push( ...args[ SYM_FUNCTION ] );
-  args['fn'  ] = args['fn'  ].pop(); 
+  args['fn'  ] = args['fn'  ].pop();
 
   // console.error( 'asd23352tgw', args);
 
@@ -145,6 +145,10 @@ const edit_error_simple = (error_on_occured, error_on_created)=>{
   return error_on_occured;
 };
 
+const edit_error_thru = (error_on_occured, error_on_created)=>{
+  return error_on_occured;
+};
+
 
 class StackTrace extends Error {
   constructor (...args) {
@@ -229,7 +233,8 @@ function typesafe_function( ...args ) {
   };
 
   const error_on_created = new StackTrace();
-  const edit_error = edit_error_simple;
+  // const edit_error = edit_error_simple;
+  const edit_error = edit_error_thru;
 
   // Note that `preventUndefined` ignores null validator.
   // Also note that typesafe_input / typesafe_output are validator factories.
@@ -248,7 +253,7 @@ function typesafe_function( ...args ) {
           }
 
           const input  = unprotected_input ? args : preventUndefined(
-            args, 
+            args,
             {
               validator: input_validator,
               onError : (...args)=>call_handler( this, on_input_error, 'on_input_error', ...args ),
@@ -293,7 +298,7 @@ function typesafe_function( ...args ) {
           }
 
           const input  = unprotected_input ? args : preventUndefined(
-            args, 
+            args,
             {
               validator: input_validator,
               onError : (...args)=>call_handler( this, on_input_error, 'on_input_error', ...args ),
