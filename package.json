@@ -1,6 +1,6 @@
 {
   "name": "runtime-typesafety",
-  "version": "1.0.3",
+  "version": "3.0.0",
   "description": "an utility to propose a way to implement type-safety at run-time, not compile-time",
   "main": "index.mjs",
   "type": "module",
@@ -27,11 +27,11 @@
   ],
   "author": {
     "name": "Atsushi Oka",
-    "url": "https://github.com/a-oka-z/runtime-typesafety"
+    "url": "https://github.com/apupu-framework"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/a-oka-z/runtime-typesafety"
+    "url": "https://github.com/apupu-framework/runtime-typesafety"
   },
   "license": "ISC",
   "devDependencies": {
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "fold-args": "^1.0.1",
-    "prevent-undefined": "^0.2.33",
-    "vanilla-schema-validator": "^2.0.4"
+    "prevent-undefined": "^3.0.0",
+    "vanilla-schema-validator": "^3.0.1"
   }
 }

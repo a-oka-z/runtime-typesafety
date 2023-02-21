@@ -63,7 +63,7 @@ t_callback_arguments : object(
 t_callback_arguments_on_enter : and(
   t_callback_arguments(),
   object(
-    args : array_of( any() ), // the arguments which are passed when 
+    args : array_of( any() ), // the arguments which are passed when
                               // the protected function is called.
   ),
 );
@@ -77,7 +77,7 @@ t_callback_arguments_on_leave : and(
 );
 ```
 
-[//]: # (Fri, 10 Feb 2023 16:12:39 +0900) 
+[//]: # (Fri, 10 Feb 2023 16:12:39 +0900)
 
 
  History
@@ -98,6 +98,10 @@ Updated `README.md` to correct a grammatical error.
 (Fri, 20 Jan 2023 16:06:02 +0900)
 added `set_typesafe_tags()` function.
 
+#### v3.0.0 ####
+(Tue, 21 Feb 2023 17:21:30 +0900)
+Updated the major version to 3; version 3 depends on prevent-undefined@3.0.0 or
+later and vanilla-schema-validator@3.0.0 or later.
 
 
  Conclusion
@@ -108,6 +112,6 @@ Thank you very much for your attention.
 
 [Github Repository of `runtime-typesafety`][Github]
 
-[Github]: https://github.com/a-oka-z/runtime-typesafety
-[Atsushi Oka]: https://github.com/a-oka-z/
+[Github]: https://github.com/apupu-framework/runtime-typesafety
+[Atsushi Oka]: https://github.com/apupu-framework/
 
