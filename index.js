@@ -170,6 +170,8 @@ function typesafe_function( ...args ) {
     on_enter            = ()=>{},
     on_leave            = ()=>{},
     on_leave_with_error = ()=>{},
+    on_leave_with_input_validation_failure  = null,
+    on_leave_with_output_validation_failure = null, // ADDED (Mon, 08 May 2023 17:58:55 +0900)
     on_input_error      = ()=>{},
     on_output_error     = ()=>{},
     unprotected_input   = false,
@@ -216,6 +218,14 @@ function typesafe_function( ...args ) {
   if ( typeof on_output_error != 'function' ) {
     throw new ReferenceError( `on_output_error must be a function but ${typeof on_output_error}` );
   }
+  // ADDED (Mon, 08 May 2023 17:58:55 +0900)
+  if ( on_leave_with_input_validation_failure && ( typeof on_leave_with_input_validation_failure === 'function' ) ) {
+    throw new ReferenceError( `on_leave_with_input_validation_failure must be a function but ${typeof on_leave_with_input_validation_failure}` );
+  }
+  // ADDED (Mon, 08 May 2023 17:58:55 +0900)
+  if ( on_leave_with_output_validation_failure && ( typeof on_leave_with_output_validation_failure === 'function' ) ) {
+    throw new ReferenceError( `on_leave_with_output_validation_failure must be a function but ${typeof on_leave_with_output_validation_failure}` );
+  }
 
   const  call_handler = (thisArg, handler, handler_name, __nargs)=>{
     const __new_args =  {
@@ -239,99 +249,100 @@ function typesafe_function( ...args ) {
   // Note that `preventUndefined` ignores null validator.
   // Also note that typesafe_input / typesafe_output are validator factories.
 
+
+  // PROC1 : PREPROCES()
+  const __preprocess = (thisArg, args)=>{
+    call_handler(thisArg, on_enter,'on_enter', {args});
+
+    const input_validator = wrap_validator( typesafe_input() );
+    const input_validator_result = trace_validator( input_validator, args );
+
+    if ( ! input_validator_result.value ) {
+      call_handler( thisArg, on_input_error, 'on_input_error' , { trace_validator_result : input_validator_result } );
+      const err =  new TypeError( 'failure of input validation error' );
+      Object.defineProperty( err, 'trace_validator_result', {
+        configurable : true,
+        enumerable : true,
+        writable : true,
+        value : input_validator_result,
+      });
+      throw err;
+    }
+
+    const input  = unprotected_input ? args : preventUndefined(
+      args,
+      {
+        validator: input_validator,
+        onError : (...args)=>call_handler( thisArg, on_input_error, 'on_input_error', ...args ),
+      }
+    );
+
+    return input;
+  };
+
+  // PROC2 : POSTPROCESS()
+  const __postprocess = ( thisArg, result )=>{
+    const output_validator = typesafe_output();
+    const output_validator_result = trace_validator( output_validator, result );
+
+    if ( ! output_validator_result.value ) {
+      call_handler( thisArg, on_output_error, 'on_output_error', { trace_validator_result : output_validator_result } );
+      const err =  new TypeError( 'failure of output validation error' );
+      Object.defineProperty( err, 'trace_validator_result', {
+        configurable : true,
+        enumerable : true,
+        writable : true,
+        value : output_validator_result,
+      });
+      throw err;
+    }
+
+    const output = unprotected_output ? result : preventUndefined(
+      result,
+      {
+        validator : output_validator,
+        onError : (...args)=>call_handler( thisArg, on_output_error, 'on_output_error', ...args ),
+      });
+
+    call_handler( thisArg, on_leave,'on_leave', {result} );
+
+    return output;
+  };
+
+  // PROC3 : CATCH_ERROR()
+  const __catch_error = ( thisArg, e )=>{
+    e = edit_error(e, error_on_created);
+    const __nargs = {
+      error : e,
+    };
+    if ( 'trace_validator_result' in e ) {
+      __nargs.trace_validator_result = e.trace_validator_result;
+    }
+    call_handler( thisArg, on_leave_with_error, 'on_leave_with_error', __nargs );
+    return e;
+  };
+
   const result = (()=>{
     if ( fn.constructor.name === 'AsyncFunction' ) {
-      return async function (...args) {
+      return   async   function (...args) {
         try {
-          call_handler(this, on_enter,'on_enter', {args});
-
-          const input_validator = wrap_validator( typesafe_input() );
-          const input_validator_result = trace_validator( input_validator, args );
-
-          if ( ! input_validator_result.value ) {
-            call_handler( this, on_input_error, 'on_input_error' , { trace_validator_result : input_validator_result } );
-            throw new TypeError( 'failure of input validation error' );
-          }
-
-          const input  = unprotected_input ? args : preventUndefined(
-            args,
-            {
-              validator: input_validator,
-              onError : (...args)=>call_handler( this, on_input_error, 'on_input_error', ...args ),
-            });
-
-
+          const input  = __preprocess( this, args );
           const result = await ( fn.apply( this, input ) );
-
-          const output_validator = typesafe_output();
-          const output_validator_result = trace_validator( output_validator, result );
-
-          if ( ! output_validator_result.value ) {
-            call_handler( this, on_output_error, 'on_output_error', { trace_validator_result : output_validator_result } );
-            throw new TypeError( 'failure of output validation error' );
-          }
-
-          const output = unprotected_output ? result : preventUndefined(
-            result,
-            {
-              validator : output_validator,
-              onError : (...args)=>call_handler( this, on_output_error, 'on_output_error', ...args ),
-            });
-
-          call_handler( this, on_leave,'on_leave', {result} );
-
+          const output = __postprocess( this, result );
           return output;
         } catch ( e ) {
-          e = edit_error(e, error_on_created);
-          call_handler( this, on_leave_with_error, 'on_leave_with_error', {error: e} );
-          throw e;
+          throw __catch_error( this, e );
         }
       };
     } else {
       return /*async*/ function (...args) {
         try {
-          call_handler(this, on_enter,'on_enter', {args});
-
-          const input_validator = wrap_validator( typesafe_input() );
-          const input_validator_result = trace_validator( input_validator, args );
-
-          if ( ! input_validator_result.value ) {
-            call_handler( this, on_input_error, 'on_input_error' , { trace_validator_result : input_validator_result } );
-            throw new TypeError( 'failure of input validation error' );
-          }
-
-          const input  = unprotected_input ? args : preventUndefined(
-            args,
-            {
-              validator: input_validator,
-              onError : (...args)=>call_handler( this, on_input_error, 'on_input_error', ...args ),
-            });
-
-
+          const input  = __preprocess( this, args );
           const result = /* await */ ( fn.apply( this, input ) );
-
-          const output_validator = typesafe_output();
-          const output_validator_result = trace_validator( output_validator, result );
-
-          if ( ! output_validator_result.value ) {
-            call_handler( this, on_output_error, 'on_output_error', { trace_validator_result : output_validator_result } );
-            throw new TypeError( 'failure of output validation error' );
-          }
-
-          const output = unprotected_output ? result : preventUndefined(
-            result,
-            {
-              validator : output_validator,
-              onError : (...args)=>call_handler( this, on_output_error, 'on_output_error', ...args ),
-            });
-
-          call_handler( this, on_leave, 'on_leave', {result} );
-
+          const output = __postprocess( this, result );
           return output;
         } catch ( e ) {
-          e = edit_error(e, error_on_created);
-          call_handler( this, on_leave_with_error, 'on_leave_with_error', {error: e} );
-          throw e;
+          throw __catch_error( this, e );
         }
       };
     }

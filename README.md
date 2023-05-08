@@ -109,6 +109,10 @@ Though, actual modification was done on May 2 2023.
 Send `trace_validator_result` via `callback_handler` on any error occured while
 execution.
 
+#### v3.0.2 ####
+(Mon, 08 May 2023 19:04:28 +0900)
+Set SchemaValidatorContext from `vanilla-schema-validator` to Error objects.
+
 
  Conclusion
 --------------------------------------------------------------------------------
