@@ -103,6 +103,12 @@ added `set_typesafe_tags()` function.
 Updated the major version to 3; version 3 depends on prevent-undefined@3.0.0 or
 later and vanilla-schema-validator@3.0.0 or later.
 
+#### v3.0.1 ####
+(Mon, 08 May 2023 13:44:27 +0900)
+Though, actual modification was done on May 2 2023.
+Send `trace_validator_result` via `callback_handler` on any error occured while
+execution.
+
 
  Conclusion
 --------------------------------------------------------------------------------
