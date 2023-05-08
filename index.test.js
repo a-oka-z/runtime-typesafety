@@ -26,7 +26,12 @@ describe('test', ()=>{
 
   it( 'test2' , ()=>{
     assert.throws(()=>{
+      try {
       console.error( safe_fn({foo:100        }).value.foo.bar.baz.value );
+      } catch ( e ) {
+        console.error('expected error', e);
+        throw e;
+      }
     });
   });
 
@@ -76,7 +81,14 @@ describe('test', ()=>{
         tags : 'bar',
       });
 
-      safe_fn();
+      assert.throws(()=>{
+        try {
+          safe_fn();
+        } catch(e){
+          console.error('expected error',e);
+          throw e;
+        }
+      });
 
     });
   });

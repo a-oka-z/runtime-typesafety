@@ -246,9 +246,10 @@ function typesafe_function( ...args ) {
           call_handler(this, on_enter,'on_enter', {args});
 
           const input_validator = wrap_validator( typesafe_input() );
+          const input_validator_result = trace_validator( input_validator, args );
 
-          if ( ! input_validator( args ) ) {
-            call_handler( this, on_input_error, 'on_input_error'  );
+          if ( ! input_validator_result.value ) {
+            call_handler( this, on_input_error, 'on_input_error' , { trace_validator_result : input_validator_result } );
             throw new TypeError( 'failure of input validation error' );
           }
 
@@ -263,9 +264,10 @@ function typesafe_function( ...args ) {
           const result = await ( fn.apply( this, input ) );
 
           const output_validator = typesafe_output();
+          const output_validator_result = trace_validator( output_validator, result );
 
-          if ( ! output_validator( result ) ) {
-            call_handler( this, on_output_error, 'on_output_error' );
+          if ( ! output_validator_result.value ) {
+            call_handler( this, on_output_error, 'on_output_error', { trace_validator_result : output_validator_result } );
             throw new TypeError( 'failure of output validation error' );
           }
 
@@ -291,9 +293,10 @@ function typesafe_function( ...args ) {
           call_handler(this, on_enter,'on_enter', {args});
 
           const input_validator = wrap_validator( typesafe_input() );
+          const input_validator_result = trace_validator( input_validator, args );
 
-          if ( ! input_validator( args ) ) {
-            call_handler( this, on_input_error, 'on_input_error'  );
+          if ( ! input_validator_result.value ) {
+            call_handler( this, on_input_error, 'on_input_error' , { trace_validator_result : input_validator_result } );
             throw new TypeError( 'failure of input validation error' );
           }
 
@@ -308,9 +311,10 @@ function typesafe_function( ...args ) {
           const result = /* await */ ( fn.apply( this, input ) );
 
           const output_validator = typesafe_output();
+          const output_validator_result = trace_validator( output_validator, result );
 
-          if ( ! output_validator( result ) ) {
-            call_handler( this, on_output_error, 'on_output_error' );
+          if ( ! output_validator_result.value ) {
+            call_handler( this, on_output_error, 'on_output_error', { trace_validator_result : output_validator_result } );
             throw new TypeError( 'failure of output validation error' );
           }
 
@@ -321,7 +325,7 @@ function typesafe_function( ...args ) {
               onError : (...args)=>call_handler( this, on_output_error, 'on_output_error', ...args ),
             });
 
-          call_handler( this, on_leave,'on_leave', {result} );
+          call_handler( this, on_leave, 'on_leave', {result} );
 
           return output;
         } catch ( e ) {
