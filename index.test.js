@@ -132,3 +132,57 @@ describe( 'edit_error' , ()=>{
 
   });
 });
+
+
+
+// ADDED (Wed, 24 May 2023 11:09:24 +0900)
+describe( 'standard test 1', {}, ()=>{
+  it( 'as 1', ()=>{
+    const f=  typesafe_function(
+      function foo( foo, bar ) {
+        return foo+bar;
+      },
+      {
+        typesafe_input : schema.compile`
+          array(
+            number(),
+            number(),
+          )
+        `,
+        typesafe_output : schema.compile`
+          number()
+        `,
+      }
+    );
+    assert.equal( f(10,20), 30 );
+  });
+  it( 'as 2', ()=>{
+    const f=  typesafe_function(
+      function foo( foo, bar ) {
+        return foo+bar;
+      },
+      {
+        typesafe_input : schema.compile`
+          array(
+            number(),
+            number(),
+          )
+        `,
+        typesafe_output : schema.compile`
+          number()
+        `,
+      }
+    );
+    assert.throws(()=>{
+      try {
+        f(10,20,30);
+      } catch ( e ){
+        console.log(e);
+        throw e;
+      }
+    });
+  });
+
+});
+
+
