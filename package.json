@@ -1,6 +1,6 @@
 {
   "name": "runtime-typesafety",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "an utility to propose a way to implement type-safety at run-time, not compile-time",
   "main": "index.mjs",
   "type": "module",
@@ -37,7 +37,7 @@
   "devDependencies": {
     "sqlmacro": "^0.1.0"
   },
-  "dependencies": {
+  "bak-dependencies": {
     "fold-args": "^1.0.1",
     "prevent-undefined": "^3.0.0",
     "vanilla-schema-validator": "^3.0.1"

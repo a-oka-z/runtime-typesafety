@@ -259,7 +259,7 @@ function typesafe_function( ...args ) {
 
     if ( ! input_validator_result.value ) {
       call_handler( thisArg, on_input_error, 'on_input_error' , { trace_validator_result : input_validator_result } );
-      const err =  new TypeError( 'failure of input validation error' );
+      const err =  new TypeError( 'failure of input validation error\n'  + input_validator_result.report() );
       Object.defineProperty( err, 'trace_validator_result', {
         configurable : true,
         enumerable : true,
@@ -287,7 +287,7 @@ function typesafe_function( ...args ) {
 
     if ( ! output_validator_result.value ) {
       call_handler( thisArg, on_output_error, 'on_output_error', { trace_validator_result : output_validator_result } );
-      const err =  new TypeError( 'failure of output validation error' );
+      const err =  new TypeError( 'failure of output validation error\n' +  output_validator_result.report() );
       Object.defineProperty( err, 'trace_validator_result', {
         configurable : true,
         enumerable : true,
