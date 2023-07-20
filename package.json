@@ -34,12 +34,16 @@
     "url": "https://github.com/apupu-framework/runtime-typesafety"
   },
   "license": "ISC",
-  "devDependencies": {
+  "bak-devDependencies": {
     "sqlmacro": "^0.1.0"
   },
   "bak-dependencies": {
     "fold-args": "^1.0.1",
     "prevent-undefined": "^3.0.0",
     "vanilla-schema-validator": "^3.0.1"
+  },
+  "devDependencies": {
+  },
+  "dependencies": {
   }
 }
