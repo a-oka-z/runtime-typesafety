@@ -11,7 +11,9 @@
     ".": {
       "import": "./index.mjs",
       "require": "./index.cjs"
-    }
+    },
+    "./index.mjs" : "./index.mjs",
+    "./index.cjs" : "./index.cjs"
   },
   "scripts": {
     "test-esm": "node --test-reporter=spec index.test.mjs",

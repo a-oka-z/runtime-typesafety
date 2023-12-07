@@ -5,7 +5,7 @@ const { fold_args, the_last, the_all } = require( 'fold-args' );
 const { schema                       } = require( 'vanilla-schema-validator' );
 const { trace_validator              } = require( 'vanilla-schema-validator' );
 const util                             = require( 'util' );
-const UTIL_INSPECT_CUSTOM              = require( 'util' ).inspect.custom;
+// const UTIL_INSPECT_CUSTOM              = require( 'util' ).inspect.custom;
 //function inspect(s) {
 //  return JSON.stringify( s, (k,v)=>typeof v === 'function' ? v.toString() : v, 2 );
 //}
@@ -22,6 +22,7 @@ const UTIL_INSPECT_CUSTOM              = require( 'util' ).inspect.custom;
 // const util                       = require('util');
 // const UTIL_INSPECT_CUSTOM        = require('util').inspect.custom;
 
+const UTIL_INSPECT_CUSTOM = Symbol.for('nodejs.util.inspect.custom')
 
 const CONST_TYPESAFE_INPUT       = Symbol.for( '__TYPESAFE_INPUT__'  );
 const CONST_TYPESAFE_OUTPUT      = Symbol.for( '__TYPESAFE_OUTPUT__' );
