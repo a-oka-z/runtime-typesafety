@@ -5,7 +5,7 @@ const { preventUndefined, unprevent  } = require( 'prevent-undefined' );
 const { fold_args, the_last, the_all } = require( 'fold-args' );
 const { schema                       } = require( 'vanilla-schema-validator' );
 const { trace_validator              } = require( 'vanilla-schema-validator' );
-const util                             = require( 'util' );
+// const util                             = require( 'util' );
 // const UTIL_INSPECT_CUSTOM              = require( 'util' ).inspect.custom;
 //function inspect(s) {
 //  return JSON.stringify( s, (k,v)=>typeof v === 'function' ? v.toString() : v, 2 );
