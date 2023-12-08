@@ -221,7 +221,7 @@ function typesafe_function( ...args ) {
     throw new ReferenceError( `typesafe_output must be a function but ${typeof typesafe_output}` );
   }
   if ( typeof on_enter != 'function' ) {
-    throw new ReferenceError( `on_enter must be a function but ${typeof on_enter} ${util.inspect(on_enter)}` );
+    throw new ReferenceError( `on_enter must be a function but ${typeof on_enter}` );
   }
   if ( typeof on_leave != 'function' ) {
     throw new ReferenceError( `on_leave must be a function but ${typeof on_leave}` );
