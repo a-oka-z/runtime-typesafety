@@ -5,7 +5,7 @@
  Synopsys
 --------------------------------------------------------------------------------
 
-``` javascript
+```javascript
 function typesafe_function({
   fn                  , // Your function to protect.
   typesafe_input      , // The validator for the input parameters.
