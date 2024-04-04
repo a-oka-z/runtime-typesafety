@@ -179,9 +179,6 @@ function typesafe_function( ...args ) {
     unprotected_output  = false,
   } = parse_args( args );
 
-  // console.error( 'unprotected_input' ,  unprotected_input );
-  // console.error( 'unprotected_output' , unprotected_output );
-
   if ( fn === null || fn === undefined ) {
     throw new ReferenceError( 'fn cannot be null or undefined' );
   }
@@ -384,6 +381,16 @@ function typesafe_function( ...args ) {
     },
     ...Object.assign({},... property),
   });
+
+
+
+  /*
+   * ADDED (Wed, 03 Apr 2024 18:43:17 +0900)
+   * MOVED (Thu, 04 Apr 2024 22:10:16 +0900)
+   * This is a hard-coding that dedicating to a module `vanilla-schema-validator`.
+   */
+  typesafe_input ?.validator_command?.({command:'notify_typesafe_input',  value:fn_name });
+  typesafe_output?.validator_command?.({command:'notify_typesafe_output', value:fn_name });
 
   return preventUndefined( result );
 }
