@@ -24,5 +24,6 @@ export {
   set_typesafe_tags,
   get_output_typesafe_info,
   get_input_typesafe_info,
+  get_typesafe_parsed_args,
 };
 

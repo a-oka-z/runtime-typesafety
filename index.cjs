@@ -26,6 +26,7 @@ const UTIL_INSPECT_CUSTOM = Symbol.for('nodejs.util.inspect.custom')
 
 const CONST_TYPESAFE_INPUT       = Symbol.for( '__TYPESAFE_INPUT__'  );
 const CONST_TYPESAFE_OUTPUT      = Symbol.for( '__TYPESAFE_OUTPUT__' );
+const CONST_TYPESAFE_PARSED_ARGS = Symbol.for( '__TYPESAFE_PARSED_ARGS__' );
 const CONST_IS_TYPESAFE_FUNCTION = Symbol.for( '__IS_TYPESAFE_FUNCTION__' );
 const CONST_TYPESAFE_TAGS        = Symbol.for( '__TYPESAFE_TAGS__' );
 
@@ -41,12 +42,13 @@ function parse_args( args ) {
     [ ...args ],
     [
       SYM_FUNCTION, SYM_STRING,
-      'fn', 'tags', 'typesafe_input', 'typesafe_output', 'property',
+      'fn', 'description', 'tags', 'typesafe_input', 'typesafe_output', 'property',
       'on_enter', 'on_leave', 'on_leave_with_error', 'on_input_error', 'on_output_error' ,
       'unprotected_input', 'unprotected_output',
     ],
     [
       {
+        description         : the_last_or_default,
         typesafe_input      : the_last_or_default,
         typesafe_output     : the_last_or_default,
         property            : the_all,
@@ -178,7 +180,9 @@ class StackTrace extends Error {
  * all event handlers are guaranteed to be called with `this`.
  */
 function typesafe_function( ...args ) {
+  const parsed_args = parse_args( args );
   const {
+    description         = null,
     fn,
     typesafe_input      = ()=>null,
     typesafe_output     = ()=>null,
@@ -193,7 +197,7 @@ function typesafe_function( ...args ) {
     on_output_error     = ()=>{},
     unprotected_input   = false,
     unprotected_output  = false,
-  } = parse_args( args );
+  } = parsed_args;
 
   if ( fn === null || fn === undefined ) {
     throw new ReferenceError( 'fn cannot be null or undefined' );
@@ -372,7 +376,25 @@ function typesafe_function( ...args ) {
     },
     // Set the name of the wrapper function to the name of the corresponding function;
     'name' : {
+      value: fn.name,
+      writable : false,
+      enumerable : false,
+      configurable : true,
+    },
+    'function-name' : {
+      value: fn.name ,
+      writable : false,
+      enumerable : true,
+      configurable : true,
+    },
+    'typesafe-function-name' : {
       value: fn.name + '(typesafe-function)',
+      writable : false,
+      enumerable : true,
+      configurable : true,
+    },
+    [CONST_TYPESAFE_PARSED_ARGS] : {
+      value: parsed_args,
       writable : false,
       enumerable : false,
       configurable : true,
@@ -405,8 +427,27 @@ function typesafe_function( ...args ) {
    * MOVED (Thu, 04 Apr 2024 22:10:16 +0900)
    * This is a hard-coding that dedicating to a module `vanilla-schema-validator`.
    */
-  typesafe_input ?.validator_command?.({command:'notify_typesafe_input',  value:fn_name });
-  typesafe_output?.validator_command?.({command:'notify_typesafe_output', value:fn_name });
+  // typesafe_input ?.validator_command?.({command:'notify_typesafe_input',  value:fn_name });
+  // typesafe_output?.validator_command?.({command:'notify_typesafe_output', value:fn_name });
+
+  /*
+   * MODIFIED (Fri, 31 May 2024 15:25:32 +0900)
+   */
+  typesafe_input ?.validator_command?.({command:'notify_typesafety', type:'input',       value:fn_name });
+  typesafe_output?.validator_command?.({command:'notify_typesafety', type:'output',      value:fn_name });
+  description    ?.validator_command?.({command:'notify_typesafety', type:'description', value:fn_name });
+
+  // console.error('(Fri, 31 May 2024 18:27:23 +0900)');
+  // console.error(description.validator_command);
+  // console.error('(Fri, 31 May 2024 18:27:23 +0900)');
+
+  if (schema.VISIT_MODULE ?? false ) {
+    // schema.VISIT_MODULE({command:'notify_typesafety', type: 'method',      value:fn_name });
+    // schema.VISIT_MODULE({command:'notify_typesafety', type: 'description', value:fn_name });
+    // schema.VISIT_MODULE({command:'notify_typesafety', type: 'input',       value:fn_name, validator_factory : typesafe_input, });
+    // schema.VISIT_MODULE({command:'notify_typesafety', type: 'output',      value:fn_name, validator_factory : typesafe_output,});
+
+  }
 
   return preventUndefined( result );
 }
@@ -431,6 +472,15 @@ function check_if_object( value ) {
   return value;
 }
 
+function get_typesafe_parsed_args( input_fn ) {
+  check_if_function( input_fn );
+
+  if ( CONST_TYPESAFE_PARSED_ARGS in input_fn ) {
+    return input_fn[CONST_TYPESAFE_PARSED_ARGS];
+  } else {
+    return null;
+  }
+}
 function get_input_typesafe_info( input_fn ) {
   check_if_function( input_fn );
 
@@ -509,3 +559,4 @@ module.exports.get_typesafe_tags        = get_typesafe_tags;
 module.exports.set_typesafe_tags        = set_typesafe_tags;
 module.exports.get_output_typesafe_info = get_output_typesafe_info
 module.exports.get_input_typesafe_info  = get_input_typesafe_info;
+module.exports.get_typesafe_parsed_args = get_typesafe_parsed_args;
