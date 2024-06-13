@@ -113,6 +113,15 @@ execution.
 (Mon, 08 May 2023 19:04:28 +0900)
 Set SchemaValidatorContext from `vanilla-schema-validator` to Error objects.
 
+#### v4.0.0 ####
+(Thu, 13 Jun 2024 16:43:53 +0900)
+- BREAKING CHANGE : Now runtime-typesafety does not apply `prevent-undefined` to
+  input/output values.
+  - Now the default value for `unprotected_input` and `unprotected_output` is
+    changed to `true`.
+  - The return value of the function `typesafe_function` used to be protected by
+    `preventUndefined`; now it returns a plain non-proxyed function.
+
 
  Conclusion
 --------------------------------------------------------------------------------

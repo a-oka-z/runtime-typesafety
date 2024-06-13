@@ -179,8 +179,8 @@ function typesafe_function( ...args ) {
     on_leave_with_output_validation_failure = null, // ADDED (Mon, 08 May 2023 17:58:55 +0900)
     on_input_error      = ()=>{},
     on_output_error     = ()=>{},
-    unprotected_input   = false,
-    unprotected_output  = false,
+    unprotected_input   = true,
+    unprotected_output  = true,
   } = parsed_args;
 
   if ( fn === null || fn === undefined ) {

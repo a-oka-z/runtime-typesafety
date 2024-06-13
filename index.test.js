@@ -31,14 +31,18 @@ describe( 'test 1', {concurrency:2}, async ()=>{
 
     ////
 
-    it( 'as test output value protection (throws) (synchronous)' , async ()=>{
+    it( 'as test output value protection (a correct argument; does not throw) (synchronous)' , async ()=>{
       assert.doesNotThrow(()=>{
         console.error( safe_fn({foo:100,bar:200}).value.foo.bar.baz.value );
       });
     }),
 
-    it( 'as test output value protection (okay) (synchronous)' , async ()=>{
-      assert.throws(()=>{
+    it( 'as test output value protection (an incorrect argument;does not throw ) (synchronous)' , async ()=>{
+      // << BREAKING CHANGE ON (Thu, 13 Jun 2024 17:10:11 +0900)
+      // assert.throws
+      assert.doesNotThrow
+      // >> BREAKING CHANGE ON (Thu, 13 Jun 2024 17:10:11 +0900)
+      (()=>{
         try {
           console.error( safe_fn({foo:100        }).value.foo.bar.baz.value );
         } catch ( e ) {
@@ -55,13 +59,17 @@ describe( 'test 1', {concurrency:2}, async ()=>{
     ////
 
     it( 'as test output value protection (throws) (asynchronous)' ,async  ()=>{
-      assert.doesNotReject(async ()=>{
+      await assert.doesNotReject(async ()=>{
         console.error( (await async_safe_fn({foo:100,bar:200})).value.foo.bar.baz.value );
       });
     }),
 
     it( 'as test output value protection (okay) (asynchronous)' ,async  ()=>{
-      assert.rejects(async ()=>{
+      // << BREAKING CHANGE ON (Thu, 13 Jun 2024 17:10:11 +0900)
+      // await assert.rejects
+      await assert.doesNotReject
+      // >> BREAKING CHANGE ON (Thu, 13 Jun 2024 17:10:11 +0900)
+      (async ()=>{
         try {
           console.error( (await async_safe_fn({foo:100        })).value.foo.bar.baz.value );
         } catch ( e ) {
