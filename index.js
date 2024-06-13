@@ -433,7 +433,8 @@ function typesafe_function( ...args ) {
 
   }
 
-  return preventUndefined( result );
+  // return preventUndefined( result );
+  return result;
 }
 
 function check_if_function( value ) {
